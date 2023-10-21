@@ -256,7 +256,7 @@ fun CalcButton(button: CalculatorButton, OnClick : () -> Unit){
                 button.text,
                 color = contentColor,
                 fontWeight = FontWeight.Bold,
-                fontSize = if (button.type == CalculatorButtonType.Action) 25.sp else 20.sp,
+                fontSize = if (button.type == CalculatorButtonType.Action) 30.sp else 25.sp,
             )
         }else{
             Icon(
