@@ -63,29 +63,102 @@ class MainActivity : ComponentActivity() {
                                 type = CalculatorButtonType.Reset,
                                 backgroundImageResource = 0
                             ),
-                            CalculatorButton("C", CalculatorButtonType.Action, backgroundImageResource = 0),
-                            CalculatorButton("%", CalculatorButtonType.Action, backgroundImageResource = 0),
-                            CalculatorButton("/", CalculatorButtonType.Action, backgroundImageResource = 0),
-                            CalculatorButton("7", CalculatorButtonType.Normal, backgroundImageResource = R.drawable.seven_tail),
-                            CalculatorButton("8", CalculatorButtonType.Normal, backgroundImageResource = R.drawable.eight_tail),
-                            CalculatorButton("9", CalculatorButtonType.Normal, backgroundImageResource = R.drawable.nine_tail),
-                            CalculatorButton("x", CalculatorButtonType.Action, backgroundImageResource = 0),
-                            CalculatorButton("4", CalculatorButtonType.Normal, backgroundImageResource = R.drawable.four_tail),
-                            CalculatorButton("5", CalculatorButtonType.Normal, backgroundImageResource = R.drawable.five_tail),
-                            CalculatorButton("6", CalculatorButtonType.Normal, backgroundImageResource = R.drawable.six_tail),
-                            CalculatorButton("-", CalculatorButtonType.Action, backgroundImageResource = 0),
-                            CalculatorButton("1", CalculatorButtonType.Normal, backgroundImageResource = R.drawable.one_tail),
-                            CalculatorButton("2", CalculatorButtonType.Normal, backgroundImageResource = R.drawable.two_tail),
-                            CalculatorButton("3", CalculatorButtonType.Normal, backgroundImageResource = R.drawable.three_tail),
-                            CalculatorButton("+", CalculatorButtonType.Action, backgroundImageResource = 0),
+                            CalculatorButton(
+                                text = "C",
+                                type = CalculatorButtonType.Action,
+                                backgroundImageResource = 0
+                            ),
+                            CalculatorButton(
+                                text = "%",
+                                type = CalculatorButtonType.Action,
+                                backgroundImageResource = 0
+                            ),
+                            CalculatorButton(
+                                text = "/",
+                                type = CalculatorButtonType.Action,
+                                backgroundImageResource = 0
+                            ),
+                            CalculatorButton(
+                                text = "7",
+                                type = CalculatorButtonType.Normal,
+                                backgroundImageResource = R.drawable.seven_tail
+                            ),
+                            CalculatorButton(
+                                text = "8",
+                                type = CalculatorButtonType.Normal,
+                                backgroundImageResource = R.drawable.eight_tail
+                            ),
+                            CalculatorButton(
+                                text = "9",
+                                type = CalculatorButtonType.Normal,
+                                backgroundImageResource = R.drawable.nine_tail
+                            ),
+                            CalculatorButton(
+                                text = "x",
+                                type = CalculatorButtonType.Action,
+                                backgroundImageResource = 0
+                            ),
+                            CalculatorButton(
+                                text = "4",
+                                type = CalculatorButtonType.Normal,
+                                backgroundImageResource = R.drawable.four_tail
+                            ),
+                            CalculatorButton(
+                                text = "5",
+                                type = CalculatorButtonType.Normal,
+                                backgroundImageResource = R.drawable.five_tail
+                            ),
+                            CalculatorButton(
+                                text = "6",
+                                type = CalculatorButtonType.Normal,
+                                backgroundImageResource = R.drawable.six_tail
+                            ),
+                            CalculatorButton(
+                                text = "-",
+                                type = CalculatorButtonType.Action,
+                                backgroundImageResource = 0
+                            ),
+                            CalculatorButton(
+                                text = "1",
+                                type = CalculatorButtonType.Normal,
+                                backgroundImageResource = R.drawable.one_tail
+                            ),
+                            CalculatorButton(
+                                text = "2",
+                                type = CalculatorButtonType.Normal,
+                                backgroundImageResource = R.drawable.two_tail
+                            ),
+                            CalculatorButton(
+                                text = "3",
+                                type = CalculatorButtonType.Normal,
+                                backgroundImageResource = R.drawable.three_tail
+                            ),
+                            CalculatorButton(
+                                text = "+",
+                                type = CalculatorButtonType.Action,
+                                backgroundImageResource = 0
+                            ),
 
                             CalculatorButton(
                                 icon = Icons.Outlined.Refresh,
-                                type = CalculatorButtonType.Normal, backgroundImageResource = 0
+                                type = CalculatorButtonType.Normal,
+                                backgroundImageResource = 0
                             ),
-                            CalculatorButton("0", CalculatorButtonType.Normal, backgroundImageResource = 0),
-                            CalculatorButton(".", CalculatorButtonType.Normal, backgroundImageResource = 0),
-                            CalculatorButton("=", CalculatorButtonType.Action, backgroundImageResource = 0)
+                            CalculatorButton(
+                                text = "0",
+                                type = CalculatorButtonType.Normal,
+                                backgroundImageResource = 0
+                            ),
+                            CalculatorButton(
+                                text = ".",
+                                type = CalculatorButtonType.Normal,
+                                backgroundImageResource = 0
+                            ),
+                            CalculatorButton(
+                                text = "=",
+                                type = CalculatorButtonType.Action,
+                                backgroundImageResource = 0
+                            )
                         )
                     }
 
