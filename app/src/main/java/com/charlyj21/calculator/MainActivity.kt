@@ -3,6 +3,7 @@ package com.charlyj21.calculator
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -30,8 +31,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -53,30 +58,34 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val calculatorButtons = remember {
                         mutableStateListOf(
-                            CalculatorButton("AC", CalculatorButtonType.Reset),
-                            CalculatorButton("C", CalculatorButtonType.Action),
-                            CalculatorButton("%", CalculatorButtonType.Action),
-                            CalculatorButton("/", CalculatorButtonType.Action),
-                            CalculatorButton("7", CalculatorButtonType.Normal),
-                            CalculatorButton("8", CalculatorButtonType.Normal),
-                            CalculatorButton("9", CalculatorButtonType.Normal),
-                            CalculatorButton("x", CalculatorButtonType.Action),
-                            CalculatorButton("4", CalculatorButtonType.Normal),
-                            CalculatorButton("5", CalculatorButtonType.Normal),
-                            CalculatorButton("6", CalculatorButtonType.Normal),
-                            CalculatorButton("-", CalculatorButtonType.Action),
-                            CalculatorButton("1", CalculatorButtonType.Normal),
-                            CalculatorButton("2", CalculatorButtonType.Normal),
-                            CalculatorButton("3", CalculatorButtonType.Normal),
-                            CalculatorButton("+", CalculatorButtonType.Action),
+                            CalculatorButton(
+                                text = "AC",
+                                type = CalculatorButtonType.Reset,
+                                backgroundImageResource = 0
+                            ),
+                            CalculatorButton("C", CalculatorButtonType.Action, backgroundImageResource = 0),
+                            CalculatorButton("%", CalculatorButtonType.Action, backgroundImageResource = 0),
+                            CalculatorButton("/", CalculatorButtonType.Action, backgroundImageResource = 0),
+                            CalculatorButton("7", CalculatorButtonType.Normal, backgroundImageResource = R.drawable.seven_tail),
+                            CalculatorButton("8", CalculatorButtonType.Normal, backgroundImageResource = R.drawable.eight_tail),
+                            CalculatorButton("9", CalculatorButtonType.Normal, backgroundImageResource = R.drawable.nine_tail),
+                            CalculatorButton("x", CalculatorButtonType.Action, backgroundImageResource = 0),
+                            CalculatorButton("4", CalculatorButtonType.Normal, backgroundImageResource = R.drawable.four_tail),
+                            CalculatorButton("5", CalculatorButtonType.Normal, backgroundImageResource = R.drawable.five_tail),
+                            CalculatorButton("6", CalculatorButtonType.Normal, backgroundImageResource = R.drawable.six_tail),
+                            CalculatorButton("-", CalculatorButtonType.Action, backgroundImageResource = 0),
+                            CalculatorButton("1", CalculatorButtonType.Normal, backgroundImageResource = R.drawable.one_tail),
+                            CalculatorButton("2", CalculatorButtonType.Normal, backgroundImageResource = R.drawable.two_tail),
+                            CalculatorButton("3", CalculatorButtonType.Normal, backgroundImageResource = R.drawable.three_tail),
+                            CalculatorButton("+", CalculatorButtonType.Action, backgroundImageResource = 0),
 
                             CalculatorButton(
                                 icon = Icons.Outlined.Refresh,
-                                type = CalculatorButtonType.Normal
+                                type = CalculatorButtonType.Normal, backgroundImageResource = 0
                             ),
-                            CalculatorButton("0", CalculatorButtonType.Normal),
-                            CalculatorButton(".", CalculatorButtonType.Normal),
-                            CalculatorButton("=", CalculatorButtonType.Action)
+                            CalculatorButton("0", CalculatorButtonType.Normal, backgroundImageResource = 0),
+                            CalculatorButton(".", CalculatorButtonType.Normal, backgroundImageResource = 0),
+                            CalculatorButton("=", CalculatorButtonType.Action, backgroundImageResource = 0)
                         )
                     }
 
@@ -140,7 +149,6 @@ fun CalcButton(button: CalculatorButton, OnClick : () -> Unit){
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(16.dp))
-            .background(MaterialTheme.colorScheme.secondary)
             .fillMaxHeight()
             .aspectRatio(1f)
             .clickable {
@@ -148,6 +156,21 @@ fun CalcButton(button: CalculatorButton, OnClick : () -> Unit){
             },
         contentAlignment = Alignment.Center
     ) {
+        if (button.backgroundImageResource != 0){
+            Image(
+                painter = painterResource(id = button.backgroundImageResource), // Replace with your actual image resource
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop,
+                alpha = 0.5f
+            )
+        }else{
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.secondary) // Aplica el color sólido como fondo
+            )
+        }
         val contentColor =
             if (button.type == CalculatorButtonType.Normal)
                 Color.White
@@ -176,7 +199,8 @@ fun CalcButton(button: CalculatorButton, OnClick : () -> Unit){
 data class CalculatorButton(
     val text: String? = null,
     val type: CalculatorButtonType,
-    val icon : ImageVector? = null
+    val icon : ImageVector? = null,
+    val backgroundImageResource: Int
 )
 
 enum class CalculatorButtonType{
