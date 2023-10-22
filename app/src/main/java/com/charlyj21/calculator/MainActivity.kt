@@ -1,5 +1,4 @@
 package com.charlyj21.calculator
-//48:22
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -30,6 +29,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -56,6 +57,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             CalculatorTheme {
                 // A surface container using the 'background' color from the theme
+
+                val darkModeEnabled by LocalTheme.current.darkMode.collectAsState()
+                val textColor = if (darkModeEnabled) Color(0xffffffff) else Color(0xff212121)
+                val themeViewModel = LocalTheme.current
+
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.secondary
@@ -102,12 +108,11 @@ class MainActivity : ComponentActivity() {
 
                     Box(
                         modifier = Modifier
-                            .fillMaxSize()
-                            ,
+                            .fillMaxSize(),
                         contentAlignment = Alignment.BottomCenter
                     ) {
                         Column{
-                            Text(modifier=Modifier.padding(horizontal = 8.dp), text = uiText, fontSize = 48.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                            Text(modifier=Modifier.padding(horizontal = 8.dp), text = uiText, fontSize = 48.sp, fontWeight = FontWeight.Bold, color = textColor)
                             Spacer(modifier = Modifier.height(32.dp))
                             LazyVerticalGrid(
                                 modifier = Modifier
@@ -122,6 +127,7 @@ class MainActivity : ComponentActivity() {
                                 items(calculatorButtons){
                                     CalcButton(
                                         button = it,
+                                        textColor = textColor,
                                         OnClick = {
                                             when(it.type){
                                                 CalculatorButtonType.Normal -> {
@@ -178,7 +184,9 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     }
-                    Box(modifier = Modifier.fillMaxSize().padding(top = 8.dp), contentAlignment = Alignment.TopCenter){
+                    Box(modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = 8.dp), contentAlignment = Alignment.TopCenter){
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(16.dp),
                             modifier= Modifier
@@ -189,16 +197,20 @@ class MainActivity : ComponentActivity() {
                                 .padding(horizontal = 15.dp, vertical = 8.dp)
                         ){
                             Icon(
-                                modifier = Modifier.size(20.dp),
+                                modifier = Modifier.size(20.dp).clickable {
+                                    themeViewModel.toggleTheme()
+                                },
                                 painter = painterResource(id = R.drawable.ic_nightmode),
                                 contentDescription = null,
-                                tint = Color.White
+                                tint = if (darkModeEnabled) Color.Gray.copy(alpha = .5f) else Color.Gray
                             )
                             Icon(
-                                modifier = Modifier.size(20.dp),
+                                modifier = Modifier.size(20.dp).clickable {
+                                    themeViewModel.toggleTheme()
+                                },
                                 painter = painterResource(id = R.drawable.ic_darkmode),
                                 contentDescription = null,
-                                tint = Color.White
+                                tint = if (!darkModeEnabled) Color.Gray.copy(alpha = .5f) else Color.Gray
                             )
                         }
                     }
@@ -209,7 +221,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun CalcButton(button: CalculatorButton, OnClick : () -> Unit){
+fun CalcButton(button: CalculatorButton, textColor:Color ,OnClick : () -> Unit){
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(16.dp))
@@ -223,7 +235,7 @@ fun CalcButton(button: CalculatorButton, OnClick : () -> Unit){
     ) {
         val contentColor =
             if (button.type == CalculatorButtonType.Normal)
-                Color.White
+                textColor
             else if (button.type == CalculatorButtonType.Action)
                 Red
             else

@@ -22,8 +22,8 @@ class AppViewModel: ViewModel() {
     fun setSecondNumber(input:Double){
         _secondNumber.update { input }
     }
-    fun setAction(input:String){
-        _action.update { input }
+    fun setAction(action:String){
+        _action.update { action }
     }
     fun resetAll(){
         _action.update { "" }
@@ -32,6 +32,7 @@ class AppViewModel: ViewModel() {
     }
 
     fun getResult(): Double {
+        println("first: ${_firstNumber.value} second: ${_secondNumber.value} action: ${action.value}")
         return when (_action.value) {
             "+" -> {
                 _firstNumber.value!! + _secondNumber.value!!
