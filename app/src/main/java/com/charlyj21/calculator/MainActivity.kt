@@ -3,6 +3,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +23,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -34,11 +36,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -62,36 +66,47 @@ class MainActivity : ComponentActivity() {
                 val textColor = if (darkModeEnabled) Color(0xffffffff) else Color(0xff212121)
                 val themeViewModel = LocalTheme.current
 
+                // Declare themes var and set default theme
+                var currentTheme by remember {
+                    mutableStateOf(CalculatorTheme.ThemeA)
+                }
+
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.secondary
                 ) {
                     val calculatorButtons = remember {
                         mutableStateListOf(
-                            CalculatorButton("AC", CalculatorButtonType.Reset),
-                            CalculatorButton("C", CalculatorButtonType.Reset),
-                            CalculatorButton("%", CalculatorButtonType.Action),
-                            CalculatorButton("/", CalculatorButtonType.Action),
-                            CalculatorButton("7", CalculatorButtonType.Normal),
-                            CalculatorButton("8", CalculatorButtonType.Normal),
-                            CalculatorButton("9", CalculatorButtonType.Normal),
-                            CalculatorButton("x", CalculatorButtonType.Action),
-                            CalculatorButton("4", CalculatorButtonType.Normal),
-                            CalculatorButton("5", CalculatorButtonType.Normal),
-                            CalculatorButton("6", CalculatorButtonType.Normal),
-                            CalculatorButton("-", CalculatorButtonType.Action),
-                            CalculatorButton("1", CalculatorButtonType.Normal),
-                            CalculatorButton("2", CalculatorButtonType.Normal),
-                            CalculatorButton("3", CalculatorButtonType.Normal),
-                            CalculatorButton("+", CalculatorButtonType.Action),
+                            CalculatorButton("AC", CalculatorButtonType.Reset, null, 0),
+                            CalculatorButton("C", CalculatorButtonType.Reset, null, 0),
+                            CalculatorButton("%", CalculatorButtonType.Action, null, 0),
+                            CalculatorButton("/", CalculatorButtonType.Action, null, 0),
+                            CalculatorButton("7", CalculatorButtonType.Normal, null, R.drawable.one_tail, CalculatorTheme.ThemeA),
+                            CalculatorButton("8", CalculatorButtonType.Normal, null, R.drawable.one_tail, CalculatorTheme.ThemeA),
+                            CalculatorButton("9", CalculatorButtonType.Normal, null, R.drawable.one_tail, CalculatorTheme.ThemeA),
+                            CalculatorButton("x", CalculatorButtonType.Action, null, 0),
+                            CalculatorButton("4", CalculatorButtonType.Normal, null, R.drawable.one_tail, CalculatorTheme.ThemeA),
+                            CalculatorButton("5", CalculatorButtonType.Normal, null, R.drawable.one_tail, CalculatorTheme.ThemeA),
+                            CalculatorButton("6", CalculatorButtonType.Normal, null, R.drawable.one_tail, CalculatorTheme.ThemeA),
+                            CalculatorButton("-", CalculatorButtonType.Action, null, 0),
+                            CalculatorButton("1", CalculatorButtonType.Normal, null, when (currentTheme) {
+                                CalculatorTheme.ThemeA -> R.drawable.one_tail
+                                CalculatorTheme.ThemeB -> R.drawable.two_tail
+                                CalculatorTheme.ThemeC -> R.drawable.nine_tail
+                            }, CalculatorTheme.ThemeA),
+                            CalculatorButton("2", CalculatorButtonType.Normal, null, R.drawable.one_tail, CalculatorTheme.ThemeA),
+                            CalculatorButton("3", CalculatorButtonType.Normal, null, R.drawable.one_tail, CalculatorTheme.ThemeA),
+                            CalculatorButton("+", CalculatorButtonType.Action, null, 0),
 
                             CalculatorButton(
-                                icon = Icons.Outlined.Refresh,
-                                type = CalculatorButtonType.Reset
+                                icon = Icons.Outlined.Favorite,
+                                type = CalculatorButtonType.Theme,
+                                backgroundImageResource = 0,
+                                theme = CalculatorTheme.ThemeA
                             ),
-                            CalculatorButton("0", CalculatorButtonType.Normal),
-                            CalculatorButton(".", CalculatorButtonType.Normal),
-                            CalculatorButton("=", CalculatorButtonType.Action)
+                            CalculatorButton("0", CalculatorButtonType.Normal, null, 0),
+                            CalculatorButton(".", CalculatorButtonType.Normal, null, 0),
+                            CalculatorButton("=", CalculatorButtonType.Action, null, 0)
                         )
                     }
                     val (uiText, setUiText) = remember {
@@ -101,6 +116,9 @@ class MainActivity : ComponentActivity() {
                         if (uiText.startsWith("0") && uiText!="0"){
                             setUiText(uiText.substring(1))
                         }
+                    }
+                    LaunchedEffect(currentTheme) {
+                        calculatorButtons.forEach { it.theme = currentTheme }
                     }
                     val (input,setInput) = remember {
                         mutableStateOf<String?>(null)
@@ -177,6 +195,14 @@ class MainActivity : ComponentActivity() {
                                                     setInput(null)
                                                     viewModel.resetAll()
                                                 }
+                                                CalculatorButtonType.Theme -> {
+                                                    currentTheme = when (currentTheme) {
+                                                        CalculatorTheme.ThemeA -> CalculatorTheme.ThemeB
+                                                        CalculatorTheme.ThemeB -> CalculatorTheme.ThemeC
+                                                        CalculatorTheme.ThemeC -> CalculatorTheme.ThemeA
+                                                    }
+                                                    calculatorButtons.forEach { it.theme = currentTheme }
+                                                }
                                             }
                                         }
                                     )
@@ -225,7 +251,7 @@ fun CalcButton(button: CalculatorButton, textColor:Color ,OnClick : () -> Unit){
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(16.dp))
-            .background(MaterialTheme.colorScheme.secondary)
+            .background(button.theme?.let { MaterialTheme.colorScheme.primary } ?: MaterialTheme.colorScheme.secondary)
             .fillMaxHeight()
             .aspectRatio(1f)
             .clickable {
@@ -233,6 +259,40 @@ fun CalcButton(button: CalculatorButton, textColor:Color ,OnClick : () -> Unit){
             },
         contentAlignment = Alignment.Center
     ) {
+        val backgroundResource = when (button.type) {
+            /* CalculatorButtonType.Theme -> {
+                when (button.theme) {
+                    CalculatorTheme.ThemeA -> R.drawable.one_tail
+                    CalculatorTheme.ThemeB -> R.drawable.two_tail
+                    CalculatorTheme.ThemeC -> R.drawable.nine_tail
+                    else -> 0
+                }
+            }*/
+            CalculatorButtonType.Normal -> {
+                when (button.theme) {
+                    CalculatorTheme.ThemeA -> R.drawable.one_tail
+                    CalculatorTheme.ThemeB -> R.drawable.two_tail
+                    CalculatorTheme.ThemeC -> R.drawable.nine_tail
+                    else -> 0
+                }
+            }
+            else -> button.backgroundImageResource
+        }
+        if (button.backgroundImageResource != 0){
+            Image(
+                painter = painterResource(id = backgroundResource),
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop,
+                alpha = 0.5f
+            )
+        }else{
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.secondary)
+            )
+        }
         val contentColor =
             if (button.type == CalculatorButtonType.Normal)
                 textColor
@@ -240,6 +300,7 @@ fun CalcButton(button: CalculatorButton, textColor:Color ,OnClick : () -> Unit){
                 Red
             else
                 Cyan
+
         if(button.text != null){
             Text(
                 button.text,
@@ -261,9 +322,15 @@ fun CalcButton(button: CalculatorButton, textColor:Color ,OnClick : () -> Unit){
 data class CalculatorButton(
     val text: String? = null,
     val type: CalculatorButtonType,
-    val icon : ImageVector? = null
+    val icon : ImageVector? = null,
+    val backgroundImageResource: Int,
+    var theme: CalculatorTheme? = null
 )
 
 enum class CalculatorButtonType{
-    Normal, Action, Reset
+    Normal, Action, Reset, Theme
+}
+
+enum class CalculatorTheme{
+    ThemeA, ThemeB, ThemeC
 }
