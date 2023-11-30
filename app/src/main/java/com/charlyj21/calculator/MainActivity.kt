@@ -1,5 +1,6 @@
 package com.charlyj21.calculator
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -24,7 +25,6 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Favorite
-import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -45,7 +45,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.charlyj21.calculator.ui.theme.CalculatorTheme
@@ -81,21 +80,53 @@ class MainActivity : ComponentActivity() {
                             CalculatorButton("C", CalculatorButtonType.Reset, null, 0),
                             CalculatorButton("%", CalculatorButtonType.Action, null, 0),
                             CalculatorButton("/", CalculatorButtonType.Action, null, 0),
-                            CalculatorButton("7", CalculatorButtonType.Normal, null, R.drawable.one_tail, CalculatorTheme.ThemeA),
-                            CalculatorButton("8", CalculatorButtonType.Normal, null, R.drawable.one_tail, CalculatorTheme.ThemeA),
-                            CalculatorButton("9", CalculatorButtonType.Normal, null, R.drawable.one_tail, CalculatorTheme.ThemeA),
+                            CalculatorButton("7", CalculatorButtonType.Normal, null, when (currentTheme) {
+                                CalculatorTheme.ThemeA -> R.drawable.btn7
+                                CalculatorTheme.ThemeB -> R.drawable.btn2
+                                CalculatorTheme.ThemeC -> R.drawable.btn3
+                            }, CalculatorTheme.ThemeA),
+                            CalculatorButton("8", CalculatorButtonType.Normal, null, when (currentTheme) {
+                                CalculatorTheme.ThemeA -> R.drawable.btn8
+                                CalculatorTheme.ThemeB -> R.drawable.btn2
+                                CalculatorTheme.ThemeC -> R.drawable.btn3
+                            }, CalculatorTheme.ThemeA),
+                            CalculatorButton("9", CalculatorButtonType.Normal, null, when (currentTheme) {
+                                CalculatorTheme.ThemeA -> R.drawable.btn9
+                                CalculatorTheme.ThemeB -> R.drawable.btn2
+                                CalculatorTheme.ThemeC -> R.drawable.btn3
+                            }, CalculatorTheme.ThemeA),
                             CalculatorButton("x", CalculatorButtonType.Action, null, 0),
-                            CalculatorButton("4", CalculatorButtonType.Normal, null, R.drawable.one_tail, CalculatorTheme.ThemeA),
-                            CalculatorButton("5", CalculatorButtonType.Normal, null, R.drawable.one_tail, CalculatorTheme.ThemeA),
-                            CalculatorButton("6", CalculatorButtonType.Normal, null, R.drawable.one_tail, CalculatorTheme.ThemeA),
+                            CalculatorButton("4", CalculatorButtonType.Normal, null, when (currentTheme) {
+                                CalculatorTheme.ThemeA -> R.drawable.btn4
+                                CalculatorTheme.ThemeB -> R.drawable.btn2
+                                CalculatorTheme.ThemeC -> R.drawable.btn3
+                            }, CalculatorTheme.ThemeA),
+                            CalculatorButton("5", CalculatorButtonType.Normal, null, when (currentTheme) {
+                                CalculatorTheme.ThemeA -> R.drawable.btn5
+                                CalculatorTheme.ThemeB -> R.drawable.btn2
+                                CalculatorTheme.ThemeC -> R.drawable.btn3
+                            }, CalculatorTheme.ThemeA),
+                            CalculatorButton("6", CalculatorButtonType.Normal, null, when (currentTheme) {
+                                CalculatorTheme.ThemeA -> R.drawable.btn6
+                                CalculatorTheme.ThemeB -> R.drawable.btn2
+                                CalculatorTheme.ThemeC -> R.drawable.btn3
+                            }, CalculatorTheme.ThemeA),
                             CalculatorButton("-", CalculatorButtonType.Action, null, 0),
                             CalculatorButton("1", CalculatorButtonType.Normal, null, when (currentTheme) {
-                                CalculatorTheme.ThemeA -> R.drawable.one_tail
-                                CalculatorTheme.ThemeB -> R.drawable.two_tail
-                                CalculatorTheme.ThemeC -> R.drawable.nine_tail
+                                CalculatorTheme.ThemeA -> R.drawable.btn1
+                                CalculatorTheme.ThemeB -> R.drawable.btn2
+                                CalculatorTheme.ThemeC -> R.drawable.btn3
                             }, CalculatorTheme.ThemeA),
-                            CalculatorButton("2", CalculatorButtonType.Normal, null, R.drawable.one_tail, CalculatorTheme.ThemeA),
-                            CalculatorButton("3", CalculatorButtonType.Normal, null, R.drawable.one_tail, CalculatorTheme.ThemeA),
+                            CalculatorButton("2", CalculatorButtonType.Normal, null, when (currentTheme) {
+                                CalculatorTheme.ThemeA -> R.drawable.btn2
+                                CalculatorTheme.ThemeB -> R.drawable.btn2
+                                CalculatorTheme.ThemeC -> R.drawable.btn3
+                            }, CalculatorTheme.ThemeA),
+                            CalculatorButton("3", CalculatorButtonType.Normal, null, when (currentTheme) {
+                                CalculatorTheme.ThemeA -> R.drawable.btn3
+                                CalculatorTheme.ThemeB -> R.drawable.btn2
+                                CalculatorTheme.ThemeC -> R.drawable.btn3
+                            }, CalculatorTheme.ThemeA),
                             CalculatorButton("+", CalculatorButtonType.Action, null, 0),
 
                             CalculatorButton(
@@ -104,7 +135,11 @@ class MainActivity : ComponentActivity() {
                                 backgroundImageResource = 0,
                                 theme = CalculatorTheme.ThemeA
                             ),
-                            CalculatorButton("0", CalculatorButtonType.Normal, null, 0),
+                            CalculatorButton("0", CalculatorButtonType.Normal, null, when (currentTheme) {
+                                CalculatorTheme.ThemeA -> R.drawable.btn0
+                                CalculatorTheme.ThemeB -> R.drawable.btn2
+                                CalculatorTheme.ThemeC -> R.drawable.btn3
+                            }, CalculatorTheme.ThemeA),
                             CalculatorButton(".", CalculatorButtonType.Normal, null, 0),
                             CalculatorButton("=", CalculatorButtonType.Action, null, 0)
                         )
@@ -112,13 +147,20 @@ class MainActivity : ComponentActivity() {
                     val (uiText, setUiText) = remember {
                         mutableStateOf("0")
                     }
+                    calculatorButtons.forEach { button ->
+                        button.theme = currentTheme
+                        button.updateBackgroundImage()
+                    }
                     LaunchedEffect(uiText){
                         if (uiText.startsWith("0") && uiText!="0"){
                             setUiText(uiText.substring(1))
                         }
                     }
                     LaunchedEffect(currentTheme) {
-                        calculatorButtons.forEach { it.theme = currentTheme }
+                        calculatorButtons.forEach { button ->
+                            button.theme = currentTheme
+                            button.updateBackgroundImage()
+                        }
                     }
                     val (input,setInput) = remember {
                         mutableStateOf<String?>(null)
@@ -201,7 +243,8 @@ class MainActivity : ComponentActivity() {
                                                         CalculatorTheme.ThemeB -> CalculatorTheme.ThemeC
                                                         CalculatorTheme.ThemeC -> CalculatorTheme.ThemeA
                                                     }
-                                                    calculatorButtons.forEach { it.theme = currentTheme }
+                                                    Log.d("Calculator", "New Theme: $currentTheme")
+                                                    calculatorButtons.forEach { it.updateBackgroundImage() }
                                                 }
                                             }
                                         }
@@ -259,28 +302,10 @@ fun CalcButton(button: CalculatorButton, textColor:Color ,OnClick : () -> Unit){
             },
         contentAlignment = Alignment.Center
     ) {
-        val backgroundResource = when (button.type) {
-            /* CalculatorButtonType.Theme -> {
-                when (button.theme) {
-                    CalculatorTheme.ThemeA -> R.drawable.one_tail
-                    CalculatorTheme.ThemeB -> R.drawable.two_tail
-                    CalculatorTheme.ThemeC -> R.drawable.nine_tail
-                    else -> 0
-                }
-            }*/
-            CalculatorButtonType.Normal -> {
-                when (button.theme) {
-                    CalculatorTheme.ThemeA -> R.drawable.one_tail
-                    CalculatorTheme.ThemeB -> R.drawable.two_tail
-                    CalculatorTheme.ThemeC -> R.drawable.nine_tail
-                    else -> 0
-                }
-            }
-            else -> button.backgroundImageResource
-        }
+
         if (button.backgroundImageResource != 0){
             Image(
-                painter = painterResource(id = backgroundResource),
+                painter = painterResource(id = button.backgroundImageResource),
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop,
@@ -323,9 +348,55 @@ data class CalculatorButton(
     val text: String? = null,
     val type: CalculatorButtonType,
     val icon : ImageVector? = null,
-    val backgroundImageResource: Int,
+    var backgroundImageResource: Int,
     var theme: CalculatorTheme? = null
-)
+){
+
+    fun updateBackgroundImage() {
+        backgroundImageResource = when (theme) {
+            CalculatorTheme.ThemeA -> when (text) {
+                "0" -> R.drawable.btn0
+                "1" -> R.drawable.btn1
+                "2" -> R.drawable.btn2
+                "3" -> R.drawable.btn3
+                "4" -> R.drawable.btn4
+                "5" -> R.drawable.btn5
+                "6" -> R.drawable.btn6
+                "7" -> R.drawable.btn7
+                "8" -> R.drawable.btn8
+                "9" -> R.drawable.btn9
+                else -> 0
+            }
+            CalculatorTheme.ThemeB -> when (text) {
+                "0" -> R.drawable.btn4
+                "1" -> R.drawable.btn4
+                "2" -> R.drawable.btn4
+                "3" -> R.drawable.btn4
+                "4" -> R.drawable.btn4
+                "5" -> R.drawable.btn4
+                "6" -> R.drawable.btn4
+                "7" -> R.drawable.btn4
+                "8" -> R.drawable.btn4
+                "9" -> R.drawable.btn4
+                else -> 0
+            }
+            CalculatorTheme.ThemeC -> when (text) {
+                "0" -> R.drawable.btn5
+                "1" -> R.drawable.btn5
+                "2" -> R.drawable.btn5
+                "3" -> R.drawable.btn5
+                "4" -> R.drawable.btn5
+                "5" -> R.drawable.btn5
+                "6" -> R.drawable.btn5
+                "7" -> R.drawable.btn5
+                "8" -> R.drawable.btn5
+                "9" -> R.drawable.btn5
+                else -> 0
+            }
+            null -> 0
+        }
+    }
+}
 
 enum class CalculatorButtonType{
     Normal, Action, Reset, Theme
